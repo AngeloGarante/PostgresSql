@@ -1,0 +1,351 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 15.0
+-- Dumped by pg_dump version 15.0
+
+-- Started on 2022-10-16 15:51:33
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 215 (class 1259 OID 16476)
+-- Name: directors; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.directors (
+    directorid integer NOT NULL,
+    name character varying(50) NOT NULL,
+    bio character varying(1000),
+    birthyear date,
+    deathyear date
+);
+
+
+ALTER TABLE public.directors OWNER TO postgres;
+
+--
+-- TOC entry 214 (class 1259 OID 16467)
+-- Name: genres; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.genres (
+    genreid integer NOT NULL,
+    name character varying(50) NOT NULL,
+    description character varying(1000)
+);
+
+
+ALTER TABLE public.genres OWNER TO postgres;
+
+--
+-- TOC entry 216 (class 1259 OID 16486)
+-- Name: movies; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.movies (
+    movieid integer NOT NULL,
+    title character varying(50) NOT NULL,
+    description character varying(1000),
+    directorid integer NOT NULL,
+    genreid integer NOT NULL,
+    imageurl character varying(300),
+    featured boolean
+);
+
+
+ALTER TABLE public.movies OWNER TO postgres;
+
+--
+-- TOC entry 220 (class 1259 OID 16526)
+-- Name: user_movies; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.user_movies (
+    usermovieid integer NOT NULL,
+    userid integer,
+    movieid integer
+);
+
+
+ALTER TABLE public.user_movies OWNER TO postgres;
+
+--
+-- TOC entry 219 (class 1259 OID 16525)
+-- Name: user_movies_usermovieid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.user_movies_usermovieid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.user_movies_usermovieid_seq OWNER TO postgres;
+
+--
+-- TOC entry 3360 (class 0 OID 0)
+-- Dependencies: 219
+-- Name: user_movies_usermovieid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.user_movies_usermovieid_seq OWNED BY public.user_movies.usermovieid;
+
+
+--
+-- TOC entry 218 (class 1259 OID 16519)
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.users (
+    userid integer NOT NULL,
+    username character varying(50) NOT NULL,
+    password character varying(50) NOT NULL,
+    email character varying(50) NOT NULL,
+    birth_date date
+);
+
+
+ALTER TABLE public.users OWNER TO postgres;
+
+--
+-- TOC entry 217 (class 1259 OID 16518)
+-- Name: users_userid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.users_userid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.users_userid_seq OWNER TO postgres;
+
+--
+-- TOC entry 3361 (class 0 OID 0)
+-- Dependencies: 217
+-- Name: users_userid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.users_userid_seq OWNED BY public.users.userid;
+
+
+--
+-- TOC entry 3191 (class 2604 OID 16529)
+-- Name: user_movies usermovieid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_movies ALTER COLUMN usermovieid SET DEFAULT nextval('public.user_movies_usermovieid_seq'::regclass);
+
+
+--
+-- TOC entry 3190 (class 2604 OID 16522)
+-- Name: users userid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN userid SET DEFAULT nextval('public.users_userid_seq'::regclass);
+
+
+--
+-- TOC entry 3349 (class 0 OID 16476)
+-- Dependencies: 215
+-- Data for Name: directors; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.directors (directorid, name, bio, birthyear, deathyear) VALUES (1, 'Peter Jackson', 'Sir Peter Jackson made history with The Lord of the Rings trilogy, becoming the first person to direct three major feature films simultaneously. The Fellowship of the Ring, The Two Towers and The Return of the King were nominated for and collected a slew of awards from around the globe, with The Return of the King receiving his most impressive collection of awards. This included three Academy Awards® (Best Adapted Screenplay, Best Director and Best Picture), two Golden Globes (Best Director and Best Motion Picture-Drama), three BAFTAs (Best Adapted Screenplay, Best Film and Viewers'' Choice), a Directors Guild Award, a Producers Guild Award and a New York Film Critics Circle Award. IMDB mini bio', '1961-01-01', NULL);
+INSERT INTO public.directors (directorid, name, bio, birthyear, deathyear) VALUES (2, 'Steven Spielberg', 'One of the most influential personalities in the history of cinema, Steven Spielberg is Hollywood''s best known director and one of the wealthiest filmmakers in the world. He has an extraordinary number of commercially successful and critically acclaimed credits to his name, either as a director, producer or writer since launching the summer blockbuster with Jaws (1975), and he has done more to define popular film-making since the mid-1970s than anyone else.IMDB mini bio', '1946-01-01', NULL);
+INSERT INTO public.directors (directorid, name, bio, birthyear, deathyear) VALUES (3, 'Ridley Scott', 'Described by film producer Michael Deeley as "the very best eye in the business", director Ridley Scott was born on November 30, 1937 in South Shields, Tyne and Wear. His father was an officer in the Royal Engineers and the family followed him as his career posted him throughout the United Kingdom and Europe before they eventually returned to Teesside. Scott wanted to join the Royal Army (his elder brother Frank had already joined the Merchant Navy) but his father encouraged him to develop his artistic talents instead and so he went to West Hartlepool College of Art and then London''s Royal College of Art where he helped found the film department.IMDB mini bio', '1937-01-01', NULL);
+
+
+--
+-- TOC entry 3348 (class 0 OID 16467)
+-- Dependencies: 214
+-- Data for Name: genres; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.genres (genreid, name, description) VALUES (1, 'Scify', 'Science fiction is a genre of fiction in which the stories often
+tell about science and technology of the future. It is
+important to note that science fiction has a relationship with
+the principles of science—these stories involve partially truepartially fictitious laws or theories of science. It should not be
+completely unbelievable, because it then ventures into the
+genre fantasy.
+The plot creates situations different from those of both the
+present day and the known past. Science fiction texts also
+include a human element, explaining what effect new
+discoveries, happenings and scientific developments will have
+on us in the future.
+Science fiction texts are often set in the future, in space, on
+a different world, or in a different universe or dimension. 
+');
+INSERT INTO public.genres (genreid, name, description) VALUES (2, 'Fantasy', 'Fantasy films are films that belong to the fantasy genre with fantastic themes, usually magic, supernatural events, mythology, folklore, or exotic fantasy worlds. The genre is considered a form of speculative fiction alongside science fiction films and horror films, although the genres do overlap.[1] Fantasy films often have an element of magic, myth, wonder, escapism, and the extraordinary.[2] Prevalent elements include fairies, angels, mermaids, witches, monsters, wizards, unicorns, dragons, talking animals, ogres, elves, trolls, white magic, gnomes, vampires, werewolves, ghosts, demons, dwarves, giants, goblins, anthropomorphic or magical objects, familiars, curses and other enchantments, worlds involving magic, and the Middle Ages.');
+INSERT INTO public.genres (genreid, name, description) VALUES (3, 'Cyberpunk', 'Cyberpunk movies are a subgenre of science-fiction cinema and typically take place in a dystopian future. In cyberpunk movies, certain aspects of the social order break down, leading to chaos. These films typically feature advanced, futuristic technology, such as artificial intelligence and virtual reality. Cyberpunk movies make extensive use of special effects to create an authentic-feeling futuristic world.');
+
+
+--
+-- TOC entry 3350 (class 0 OID 16486)
+-- Dependencies: 216
+-- Data for Name: movies; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.movies (movieid, title, description, directorid, genreid, imageurl, featured) VALUES (1, 'Lord of the Ring :Fellowship of the Ring', 'A meek Hobbit from the Shire and eight companions set out on a journey to destroy the powerful One Ring and save Middle-earth from the Dark Lord Sauron..', 1, 2, 'fellowship.png', true);
+INSERT INTO public.movies (movieid, title, description, directorid, genreid, imageurl, featured) VALUES (2, 'The Lord of the Rings: The Two Towers', 'While Frodo and Sam edge closer to Mordor with the help of the shifty Gollum, the divided fellowship makes a stand against Sauron''s new ally, Saruman, and his hordes of Isengard', 1, 2, 'fellowship.png', true);
+INSERT INTO public.movies (movieid, title, description, directorid, genreid, imageurl, featured) VALUES (3, 'The Lord of the Rings: The Return of the King', 'Gandalf and Aragorn lead the World of Men against Sauron''s army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring.', 1, 2, 'fellowship.png', true);
+INSERT INTO public.movies (movieid, title, description, directorid, genreid, imageurl, featured) VALUES (4, 'Prometheus', 'Following clues to the origin of mankind, a team finds a structure on a distant moon, but they soon realize they are not alone.', 3, 1, 'prometheus.png', false);
+INSERT INTO public.movies (movieid, title, description, directorid, genreid, imageurl, featured) VALUES (5, 'Alien: Covenant', 'The crew of a colony ship, bound for a remote planet, discover an uncharted paradise with a threat beyond their imagination, and must attempt a harrowing escape.', 3, 1, 'covenant.png', false);
+INSERT INTO public.movies (movieid, title, description, directorid, genreid, imageurl, featured) VALUES (6, 'Alien', 'The crew of a commercial spacecraft encounter a deadly lifeform after investigating an unknown transmission.', 3, 1, 'alien.png', false);
+INSERT INTO public.movies (movieid, title, description, directorid, genreid, imageurl, featured) VALUES (7, 'Ready Player One', 'When the creator of a virtual reality called the OASIS dies, he makes a posthumous challenge to all OASIS users to find his Easter Egg, which will give the finder his fortune and control of his world.', 2, 3, 'playerone.png', false);
+INSERT INTO public.movies (movieid, title, description, directorid, genreid, imageurl, featured) VALUES (8, 'Blade Runner', 'A blade runner must pursue and terminate four replicants who stole a ship in space, and have returned to Earth to find their creator.', 1, 3, 'bladerunner.png', false);
+INSERT INTO public.movies (movieid, title, description, directorid, genreid, imageurl, featured) VALUES (9, 'Blade Runner 2049', 'Young Blade Runner K''s discovery of a long-buried secret leads him to track down former Blade Runner Rick Deckard, who''s been missing for thirty years.', 1, 3, 'bladerunner2049.png', false);
+
+
+--
+-- TOC entry 3354 (class 0 OID 16526)
+-- Dependencies: 220
+-- Data for Name: user_movies; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.user_movies (usermovieid, userid, movieid) VALUES (1, 1, 4);
+INSERT INTO public.user_movies (usermovieid, userid, movieid) VALUES (2, 2, 1);
+INSERT INTO public.user_movies (usermovieid, userid, movieid) VALUES (3, 2, 2);
+INSERT INTO public.user_movies (usermovieid, userid, movieid) VALUES (5, 2, 3);
+INSERT INTO public.user_movies (usermovieid, userid, movieid) VALUES (6, 3, 5);
+INSERT INTO public.user_movies (usermovieid, userid, movieid) VALUES (7, 3, 6);
+INSERT INTO public.user_movies (usermovieid, userid, movieid) VALUES (8, 3, 7);
+
+
+--
+-- TOC entry 3352 (class 0 OID 16519)
+-- Dependencies: 218
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.users (userid, username, password, email, birth_date) VALUES (2, 'FantasyLover', 'thisisanicepassword2', 'myemail2@gmail.com', '1991-02-21');
+INSERT INTO public.users (userid, username, password, email, birth_date) VALUES (3, 'AliensExist', 'thisisanicepassword3', 'myemail3@gmail.com', '1978-02-21');
+INSERT INTO public.users (userid, username, password, email, birth_date) VALUES (1, 'MarcoRossi', 'thisisanicepassword', 'ireplacedmyemail@gmail.com', '1991-01-21');
+
+
+--
+-- TOC entry 3362 (class 0 OID 0)
+-- Dependencies: 219
+-- Name: user_movies_usermovieid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.user_movies_usermovieid_seq', 8, true);
+
+
+--
+-- TOC entry 3363 (class 0 OID 0)
+-- Dependencies: 217
+-- Name: users_userid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.users_userid_seq', 1, false);
+
+
+--
+-- TOC entry 3195 (class 2606 OID 16483)
+-- Name: directors directors_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.directors
+    ADD CONSTRAINT directors_pkey PRIMARY KEY (directorid);
+
+
+--
+-- TOC entry 3193 (class 2606 OID 16474)
+-- Name: genres genres_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.genres
+    ADD CONSTRAINT genres_pkey PRIMARY KEY (genreid);
+
+
+--
+-- TOC entry 3197 (class 2606 OID 16493)
+-- Name: movies movies_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.movies
+    ADD CONSTRAINT movies_pkey PRIMARY KEY (movieid);
+
+
+--
+-- TOC entry 3201 (class 2606 OID 16531)
+-- Name: user_movies user_movies_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_movies
+    ADD CONSTRAINT user_movies_pkey PRIMARY KEY (usermovieid);
+
+
+--
+-- TOC entry 3199 (class 2606 OID 16524)
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (userid);
+
+
+--
+-- TOC entry 3202 (class 2606 OID 16499)
+-- Name: movies directorkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.movies
+    ADD CONSTRAINT directorkey FOREIGN KEY (directorid) REFERENCES public.directors(directorid);
+
+
+--
+-- TOC entry 3203 (class 2606 OID 16494)
+-- Name: movies genrekey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.movies
+    ADD CONSTRAINT genrekey FOREIGN KEY (genreid) REFERENCES public.genres(genreid);
+
+
+--
+-- TOC entry 3204 (class 2606 OID 16537)
+-- Name: user_movies moviekey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_movies
+    ADD CONSTRAINT moviekey FOREIGN KEY (movieid) REFERENCES public.movies(movieid);
+
+
+--
+-- TOC entry 3205 (class 2606 OID 16532)
+-- Name: user_movies userkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_movies
+    ADD CONSTRAINT userkey FOREIGN KEY (userid) REFERENCES public.users(userid);
+
+
+-- Completed on 2022-10-16 15:51:33
+
+--
+-- PostgreSQL database dump complete
+--
+
